@@ -1,0 +1,22 @@
+{
+  "name": "@mistakster/readable-stream-tokenizer",
+  "version": "1.0.0",
+  "description": "Promise based tokenizer for a ReadableStream",
+  "module": "lib/tokenizer.mjs",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "ReadableStream",
+    "token",
+    "tokenizer",
+    "parser",
+    "decoder",
+    "bytes"
+  ],
+  "author": "Vladimir Kuznetsov <mistakster@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "8.3.2"
+  }
+}
