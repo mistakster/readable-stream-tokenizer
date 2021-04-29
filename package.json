@@ -19,7 +19,7 @@
     "url": "git+https://github.com/mistakster/readable-stream-tokenizer.git"
   },
   "author": "Vladimir Kuznetsov <mistakster@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "8.3.2"
   }
