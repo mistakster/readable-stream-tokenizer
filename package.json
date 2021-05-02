@@ -1,6 +1,6 @@
 {
   "name": "@mistakster/readable-stream-tokenizer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Promise based tokenizer for a ReadableStream",
   "module": "lib/Tokenizer.mjs",
   "scripts": {
