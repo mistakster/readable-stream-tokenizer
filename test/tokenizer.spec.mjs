@@ -42,7 +42,7 @@ describe('Tokenizer', () => {
     await assert.rejects(async () => {
       await tokenizer.readUint32();
     }, (err) => {
-      assert.strictEqual(err.name, 'Error');
+      assert.strictEqual(err.name, 'FinishedStreamError');
       assert.strictEqual(err.message, 'ReadableStream has been finished');
       return true;
     });
