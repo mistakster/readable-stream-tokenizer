@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Tokenizer } from '../lib/tokenizer.mjs';
+import { Tokenizer } from '../lib/Tokenizer.mjs';
 import { createMockReadableStream } from './createMockReadableStream.mjs';
 
 const unfinishedPromise = new Promise(() => {});

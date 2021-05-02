@@ -2,7 +2,7 @@
   "name": "@mistakster/readable-stream-tokenizer",
   "version": "1.2.0",
   "description": "Promise based tokenizer for a ReadableStream",
-  "module": "lib/tokenizer.mjs",
+  "module": "lib/Tokenizer.mjs",
   "scripts": {
     "test": "mocha"
   },
