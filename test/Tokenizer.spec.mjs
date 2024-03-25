@@ -3,9 +3,6 @@ import { Tokenizer } from '../lib/Tokenizer.mjs';
 import { createMockReadableStream } from './createMockReadableStream.mjs';
 import { FinishedStreamError } from "../lib/FinishedStreamError.mjs";
 
-const unfinishedPromise = new Promise(() => {
-});
-
 describe('Tokenizer', () => {
   it('should read Uint32', async () => {
     function* generator() {
@@ -14,7 +11,7 @@ describe('Tokenizer', () => {
       yield new Uint8Array([3, 4]);
     }
 
-    const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
+    const tokenizer = new Tokenizer(createMockReadableStream(generator));
 
     expect(await tokenizer.readUint32()).toEqual(528408);
     expect(await tokenizer.readUint32()).toEqual(539504696);
@@ -28,7 +25,7 @@ describe('Tokenizer', () => {
       yield new Uint8Array([3, 4]);
     }
 
-    const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
+    const tokenizer = new Tokenizer(createMockReadableStream(generator));
 
     expect(await tokenizer.readUint8Array(2)).toEqual(new Uint8Array([0, 8]));
     expect(await tokenizer.readUint8Array(6)).toEqual(new Uint8Array([16, 24, 32, 40, 48, 56]));
@@ -40,7 +37,7 @@ describe('Tokenizer', () => {
         yield new Uint8Array([1, 2, 3]);
       }
 
-      const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
+      const tokenizer = new Tokenizer(createMockReadableStream(generator));
 
       await tokenizer.readUint32();
     }
@@ -51,18 +48,12 @@ describe('Tokenizer', () => {
 
   it('should throw an error on reading from the closed stream', async () => {
     async function task() {
-      let reject;
-      const closed = new Promise((_resolve, _reject) => reject = _reject);
-
       function* generator() {
         yield new Uint8Array([1, 2, 3, 4]);
-
-        reject(new Error('Abort'));
-
-        yield new Uint8Array([1, 2, 3, 4]);
+        throw new Error('Abort');
       }
 
-      const tokenizer = new Tokenizer(createMockReadableStream(generator, closed));
+      const tokenizer = new Tokenizer(createMockReadableStream(generator));
 
       await tokenizer.readUint32();
       await tokenizer.readUint32();

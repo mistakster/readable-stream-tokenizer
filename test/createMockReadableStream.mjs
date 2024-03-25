@@ -4,24 +4,16 @@ function delay(timeout) {
 
 /**
  * @param {function: Generator<Uint8Array>} generator
- * @param {Promise} closed
  * @returns {ReadableStream}
  */
-export function createMockReadableStream(generator, closed) {
-  const gen = generator();
+export function createMockReadableStream(generator) {
+  async function* delayedGenerator() {
+    for (const value of generator()) {
+      yield value;
 
-  return {
-    getReader() {
-      return {
-        async read() {
-          const result = await gen.next();
-
-          await delay(100);
-
-          return result;
-        },
-        closed
-      }
+      await delay(100);
     }
-  };
+  }
+
+  return ReadableStream.from(delayedGenerator());
 }
