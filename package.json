@@ -4,7 +4,7 @@
   "description": "Promise based tokenizer for a ReadableStream",
   "module": "lib/Tokenizer.mjs",
   "scripts": {
-    "test": "mocha"
+    "test": "vitest"
   },
   "keywords": [
     "ReadableStream",
@@ -21,6 +21,6 @@
   "author": "Vladimir Kuznetsov <mistakster@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "8.3.2"
+    "vitest": "^1.4.0"
   }
 }

@@ -1,8 +1,10 @@
-import assert from 'assert';
+import { describe, it, expect } from "vitest";
 import { Tokenizer } from '../lib/Tokenizer.mjs';
 import { createMockReadableStream } from './createMockReadableStream.mjs';
+import { FinishedStreamError } from "../lib/FinishedStreamError.mjs";
 
-const unfinishedPromise = new Promise(() => {});
+const unfinishedPromise = new Promise(() => {
+});
 
 describe('Tokenizer', () => {
   it('should read Uint32', async () => {
@@ -14,9 +16,9 @@ describe('Tokenizer', () => {
 
     const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
 
-    assert.strictEqual(await tokenizer.readUint32(), 528408);
-    assert.strictEqual(await tokenizer.readUint32(), 539504696);
-    assert.strictEqual(await tokenizer.readUint32(), 16909060);
+    expect(await tokenizer.readUint32()).toEqual(528408);
+    expect(await tokenizer.readUint32()).toEqual(539504696);
+    expect(await tokenizer.readUint32()).toEqual(16909060);
   });
 
   it('should read Uint8Array', async () => {
@@ -28,47 +30,45 @@ describe('Tokenizer', () => {
 
     const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
 
-    assert.deepStrictEqual(await tokenizer.readUint8Array(2), new Uint8Array([0, 8]));
-    assert.deepStrictEqual(await tokenizer.readUint8Array(6), new Uint8Array([16, 24, 32, 40, 48, 56]));
+    expect(await tokenizer.readUint8Array(2)).toEqual(new Uint8Array([0, 8]));
+    expect(await tokenizer.readUint8Array(6)).toEqual(new Uint8Array([16, 24, 32, 40, 48, 56]));
   });
 
   it('should throw an error when no data is available', async () => {
-    function* generator() {
-      yield new Uint8Array([1, 2, 3]);
+    async function task() {
+      function* generator() {
+        yield new Uint8Array([1, 2, 3]);
+      }
+
+      const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
+
+      await tokenizer.readUint32();
     }
 
-    const tokenizer = new Tokenizer(createMockReadableStream(generator, unfinishedPromise));
-
-    await assert.rejects(async () => {
-      await tokenizer.readUint32();
-    }, (err) => {
-      assert.strictEqual(err.name, 'FinishedStreamError');
-      assert.strictEqual(err.message, 'ReadableStream has been finished');
-      return true;
-    });
+    await expect(task()).rejects
+      .toThrowError(new FinishedStreamError('ReadableStream has been finished'));
   });
 
   it('should throw an error on reading from the closed stream', async () => {
-    let reject;
-    const closed = new Promise((_resolve, _reject) => reject = _reject);
+    async function task() {
+      let reject;
+      const closed = new Promise((_resolve, _reject) => reject = _reject);
 
-    function* generator() {
-      yield new Uint8Array([1, 2, 3, 4]);
+      function* generator() {
+        yield new Uint8Array([1, 2, 3, 4]);
 
-      reject(new Error('Abort'));
+        reject(new Error('Abort'));
 
-      yield new Uint8Array([1, 2, 3, 4]);
+        yield new Uint8Array([1, 2, 3, 4]);
+      }
+
+      const tokenizer = new Tokenizer(createMockReadableStream(generator, closed));
+
+      await tokenizer.readUint32();
+      await tokenizer.readUint32();
     }
 
-    const tokenizer = new Tokenizer(createMockReadableStream(generator, closed));
-
-    await assert.rejects(async () => {
-      await tokenizer.readUint32();
-      await tokenizer.readUint32();
-    }, (err) => {
-      assert.strictEqual(err.name, 'Error');
-      assert.strictEqual(err.message, 'Abort');
-      return true;
-    });
+    await expect(task()).rejects
+      .toThrowError(new Error('Abort'));
   });
 });
