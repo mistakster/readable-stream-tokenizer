@@ -12,12 +12,12 @@ const tokenizer = new Tokenizer(ReadableStream.from(generator()));
 
 const histogram = createHistogram();
 
-const readUint8Array = performance.timerify(tokenizer.readUint8Array.bind(tokenizer), {
+const method = performance.timerify(tokenizer.readUint8Array.bind(tokenizer), {
   histogram
 });
 
 for (let i = 0; i < 1e7; i++) {
-  await readUint8Array(100);
+  await method(100);
 }
 
 console.log(histogram);
