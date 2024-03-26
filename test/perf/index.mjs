@@ -1,6 +1,6 @@
 import { performance, createHistogram } from "node:perf_hooks";
 import { getRandomValues } from "node:crypto";
-import { Tokenizer } from "../../lib/Tokenizer.mjs";
+import { Tokenizer } from "../../lib/TokenizerFast.mjs";
 
 function* generator() {
   const random = new Uint8Array(10000);
@@ -27,7 +27,7 @@ const method = performance.timerify(tokenizer.readUint8Array.bind(tokenizer), {
 });
 
 for (let i = 0; i < 1e6; i++) {
-  await tokenizer.readUint8Array(1000);
+  await method(1000);
   // if (i % 100000000 === 0) {
   //   await new Promise(resolve => setTimeout(resolve, 100));
   // }
