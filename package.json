@@ -4,6 +4,7 @@
   "description": "Promise based tokenizer for a ReadableStream",
   "module": "lib/index.mjs",
   "scripts": {
+    "perf": "node ./test/perf/index.mjs",
     "test": "vitest"
   },
   "keywords": [
