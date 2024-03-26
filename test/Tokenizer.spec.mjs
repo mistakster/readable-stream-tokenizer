@@ -22,12 +22,15 @@ describe('Tokenizer', () => {
       yield new Uint8Array([0, 8, 16, 24]);
       yield new Uint8Array([32, 40, 48, 56, 1, 2]);
       yield new Uint8Array([3, 4]);
+      yield new Uint8Array([5, 6, 7, 8])
     }
 
     const tokenizer = new Tokenizer(createMockReadableStream(generator));
 
     expect(await tokenizer.readUint8Array(2)).toEqual(new Uint8Array([0, 8]));
     expect(await tokenizer.readUint8Array(6)).toEqual(new Uint8Array([16, 24, 32, 40, 48, 56]));
+    expect(await tokenizer.readUint8Array(4)).toEqual(new Uint8Array([1, 2, 3, 4]));
+    expect(await tokenizer.readUint8Array(4)).toEqual(new Uint8Array([5, 6, 7, 8]));
   });
 
   it('should throw an error when no data is available', async () => {
