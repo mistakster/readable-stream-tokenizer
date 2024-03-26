@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Tokenizer, FinishedStreamError } from '../lib/index.mjs';
-import { createMockReadableStream } from './createMockReadableStream.mjs';
+import { createMockReadableStream } from './utils/createMockReadableStream.mjs';
 
 describe('Tokenizer', () => {
   it('should read Uint32', async () => {
