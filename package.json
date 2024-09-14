@@ -3,6 +3,7 @@
   "version": "1.3.0",
   "description": "Promise based tokenizer for a ReadableStream",
   "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "vitest"
   },
