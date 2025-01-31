@@ -1,3 +1,3 @@
 export class FinishedStreamError extends Error {
-    constructor(message: any);
+  constructor(message: any);
 }
