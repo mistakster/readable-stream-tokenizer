@@ -23,6 +23,6 @@
   "author": "Vladimir Kuznetsov <mistakster@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "vitest": "^1.4.0"
+    "vitest": "^3.0.4"
   }
 }
